@@ -12,13 +12,15 @@ vagrant plugin install vagrant-networkadapter
 
 ## Usage
 
-Set the size you want for your disk in your Vagrantfile. For example
+Adds a new adapter to the VM. For example
 
 ```ruby
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/xenial64'
-  config.networkadapter.size = 10 * 1024 # size in megabytes
-  config.networkadapter.path = "/tmp/your-file.vdi"
+  config.vm.box = 'hashicorp/precise64'
+  # Add a first adapter
+  config.networkadapter.add name: "adap1", switchname: "internal"
+  # Add a second adapter
+  config.networkadapter.add name: "adap2", switchname: "WAN"
 end
 ```
 

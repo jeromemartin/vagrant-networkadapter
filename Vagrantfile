@@ -33,12 +33,12 @@ Vagrant.configure("2") do |config|
   # your network.
 
   config.vm.network "public_network", bridge: "WAN"
-  # config.vm.network "tutu", bridge: "internal"
 
-  # config.networkadapter.switchname = "internal"
-  # config.networkadapter.name = "toto"
-  config.networkadapter.add switchname: "External_vSwitch", name: "tata"
-  config.networkadapter.add switchname: "internal", name: "tutu"
+  # Create a first network adapter attached to switch 'External_vSwitch'
+  config.networkadapter.add switchname: "External_vSwitch", name: "adapter #1"
+  
+  # Create a second network adapter attached to switch 'internal'
+  config.networkadapter.add switchname: "internal", name: "adapter #2"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
