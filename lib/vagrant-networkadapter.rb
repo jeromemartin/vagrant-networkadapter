@@ -16,12 +16,12 @@ module Vagrant
       DESC
 
       config 'networkadapter' do
-        require_relative 'networkadapter/config'
+        require_relative 'vagrant-networkadapter/config'
         Config
       end
 
       action_hook(:networkadapter, :machine_action_up) do |hook|
-        require_relative 'networkadapter/actions'
+        require_relative 'vagrant-networkadapter/actions'
         hook.after(VagrantPlugins::HyperV::Action::Configure, Action::NetworkAdapterHyperV)
       end
     end

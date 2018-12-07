@@ -12,18 +12,27 @@ module Vagrant
           if @machine.provider.to_s !~ /Hyper-V/
             @enabled = false
             provider = @machine.provider.to_s
-            env[:ui].error "The vagrant-networkadapter plugin only supports HyperV at present: current is #{provider}."
+            env[:ui].error "vagrant-networkadapter: plugin only supports HyperV at present: current is #{provider}."
           end
         end
 
         def call(env)
+          network_adapters = @config.network_adapters
           # Create the adapter
-          if @enabled and @config.is_set?
-            switchname = @config.switchname
-            name = @config.name
-            env[:ui].info "call hyperv networkadapter: switch-name = #{switchname}/#{name}"
-
-            new_networkadapter(env, switchname, name)
+          if @enabled
+            network_adapters.each do |adap|
+              if !adap.has_key?(:switchname) or !adap.has_key?(:name)
+                env[:ui].error "vagrant-networkadapter: invalid network adapters configuration: missing key name or swichnamme."
+              else
+                switchname = adap[:switchname]
+                name = adap[:name]
+                env[:ui].info "vagrant-networkadapter: Creating network adapter #{name} with switch-name = #{switchname}"
+    
+                new_networkadapter(env, switchname, name)
+              end
+            end
+          else
+            env[:ui].warn "vagrant-networkadapter: not enabled."
           end
 
           # Allow middleware chain to continue so VM is booted
