@@ -22,11 +22,11 @@ module Vagrant
           if @enabled
             network_adapters.each do |adap|
               if !adap.has_key?(:switchname) or !adap.has_key?(:name)
-                env[:ui].error "vagrant-networkadapter: invalid network adapters configuration: missing key name or swichnamme."
+                env[:ui].error "vagrant-networkadapter: invalid network adapters configuration: missing 'name' or 'swichname'."
               else
                 switchname = adap[:switchname]
                 name = adap[:name]
-                env[:ui].info "vagrant-networkadapter: Creating network adapter #{name} with switch-name = #{switchname}"
+                env[:ui].info "vagrant-networkadapter: Creating network adapter '#{name}' attached to switch '#{switchname}''"
     
                 new_networkadapter(env, switchname, name)
               end
