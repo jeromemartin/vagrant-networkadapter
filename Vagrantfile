@@ -32,13 +32,13 @@ Vagrant.configure("2") do |config|
   # Bridged networks make the machine appear as another physical device on
   # your network.
 
-  config.vm.network "public_network", bridge: "WAN"
+  config.vm.network "public_network", bridge: "Commutateur par défaut"
 
   # Create a first network adapter attached to switch 'External_vSwitch'
-  config.networkadapter.add switchname: "External_vSwitch", name: "adapter #1"
+  config.networkadapter.add switchname: "external", name: "adapter #1"
   
   # Create a second network adapter attached to switch 'internal'
-  config.networkadapter.add switchname: "internal", name: "adapter #2"
+  # config.networkadapter.add switchname: "internal", name: "adapter #2"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -74,8 +74,11 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
   #   apt-get install -y apache2
-  # SHELL
+  SHELL
+  
+  # Change network adapter attached to switch 'internal'
+  config.networkadapter.change switchname: "internal", name: "adapter #1"
 end

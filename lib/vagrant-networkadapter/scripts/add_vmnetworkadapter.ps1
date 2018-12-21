@@ -12,7 +12,7 @@ param(
 $VM = Get-VM -Id $VmId
 
 try {
-	Write-Host "Creating NetworkAdapter"
+	Write-Host "Adding NetworkAdapter"
     Add-VMNetworkAdapter -VM $VM -SwitchName $SwitchName -Name $Name
 } catch {
     $ErrorMessage = $_.Exception.Message

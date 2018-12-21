@@ -20,9 +20,14 @@ module Vagrant
         Config
       end
 
-      action_hook(:networkadapter, :machine_action_up) do |hook|
+      action_hook(:networkadapter_add, :machine_action_up) do |hook|
         require_relative 'vagrant-networkadapter/actions'
-        hook.after(VagrantPlugins::HyperV::Action::Configure, Action::NetworkAdapterHyperV)
+        hook.after(VagrantPlugins::HyperV::Action::Configure, Action::NetworkAdapterAddHyperV)
+      end
+
+      action_hook(:networkadapter_change, :provisioner_run) do |hook|
+        require_relative 'vagrant-networkadapter/actions'
+        hook.after(:run_provisioner, Action::NetworkAdapterChangeHyperV)
       end
     end
   end
