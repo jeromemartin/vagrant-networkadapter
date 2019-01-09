@@ -24,8 +24,8 @@ module Vagrant
               if !adap.has_key?(:switchname) or !adap.has_key?(:name)
                 env[:ui].error "vagrant-networkadapter (add): invalid network adapters configuration: missing 'name' or 'swichname'."
               else
-                switchname = adap[:switchname]
-                name = adap[:name]
+                switchname = adap[:switchname].encode("ISO-8859-1")
+                name = adap[:name].encode("ISO-8859-1")
                 env[:ui].info "vagrant-networkadapter (add): Creating network adapter '#{name}' attached to switch '#{switchname}''"
     
                 new_networkadapter(env, switchname, name)
@@ -76,8 +76,8 @@ module Vagrant
               if !adap.has_key?(:switchname)
                 env[:ui].error "vagrant-networkadapter (change): invalid network adapters configuration: missing 'swichname'."
               else
-                switchname = adap[:switchname]
-                name = adap[:name]
+                switchname = adap[:switchname].encode("ISO-8859-1")
+                name = adap[:name].encode("ISO-8859-1")
                 env[:ui].info "vagrant-networkadapter (change): Changing network adapter '#{name}' to switch '#{switchname}''"
     
                 change_networkadapter(env, switchname, name)
