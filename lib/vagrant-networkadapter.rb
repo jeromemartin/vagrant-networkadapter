@@ -20,7 +20,7 @@ module Vagrant
         Config
       end
 	  
-      action_hook(:networkadapter_rename, :machine_action_up) do |hook|
+      action_hook(:networkadapter_rename, :machine_action_boot) do |hook|
         require_relative 'vagrant-networkadapter/actions'
         hook.after(VagrantPlugins::HyperV::Action::Configure, Action::NetworkAdapterRenameHyperV)
       end
