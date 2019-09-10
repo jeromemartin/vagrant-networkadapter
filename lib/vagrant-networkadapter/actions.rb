@@ -2,59 +2,7 @@ module Vagrant
   module NetworkAdapter
     class Action
 
-      class NetworkAdapterAddHyperV
-        def initialize(app, env)
-          @app = app
-          @machine = env[:machine]
-          @config = @machine.config.networkadapter
-          @enabled = true
-          @ui = env[:ui]
-          if @machine.provider.to_s !~ /Hyper-V/
-            @enabled = false
-            provider = @machine.provider.to_s
-            env[:ui].error "vagrant-networkadapter (add): plugin only supports HyperV at present: current is #{provider}."
-          end
-        end
-
-        def call(env)
-          network_adapters_added = @config.network_adapters_added
-          # Create the adapter
-          if @enabled
-            network_adapters_added.each do |adap|
-              if !adap.has_key?(:switchname) or !adap.has_key?(:name)
-                env[:ui].error "vagrant-networkadapter (add): invalid network adapters configuration: missing 'name' or 'swichname'."
-              else
-                switchname = adap[:switchname].encode("ISO-8859-1")
-                name = adap[:name].encode("ISO-8859-1")
-                env[:ui].info "vagrant-networkadapter (add): Creating network adapter '#{name}' attached to switch '#{switchname}''"
-    
-                new_networkadapter(env, switchname, name)
-              end
-            end
-          else
-            env[:ui].warn "vagrant-networkadapter (add): not enabled."
-          end
-
-          # Allow middleware chain to continue so VM is booted
-          @app.call(env)
-        end
-
-        private
-
-        def new_networkadapter(env, switchname, name)
-          driver = @machine.provider.driver
-          options = {
-            "VMID" => @machine.id,
-            "SwitchName" => switchname,
-            "Name" => name
-          }
-          s = File.join(File.dirname(__FILE__), 'scripts', 'add_vmnetworkadapter.ps1')
-          driver.execute(s, options)
-        end
-      end
-	  
-	  
-	  class NetworkAdapterRenameHyperV
+      class NetworkAdapterRenameHyperV
         def initialize(app, env)
           @app = app
           @machine = env[:machine]
@@ -111,7 +59,59 @@ module Vagrant
 	  end
     
     
-      class NetworkAdapterChangeHyperV
+      class NetworkAdapterAddHyperV
+        def initialize(app, env)
+          @app = app
+          @machine = env[:machine]
+          @config = @machine.config.networkadapter
+          @enabled = true
+          @ui = env[:ui]
+          if @machine.provider.to_s !~ /Hyper-V/
+            @enabled = false
+            provider = @machine.provider.to_s
+            env[:ui].error "vagrant-networkadapter (add): plugin only supports HyperV at present: current is #{provider}."
+          end
+        end
+
+        def call(env)
+          network_adapters_added = @config.network_adapters_added
+          # Create the adapter
+          if @enabled
+            network_adapters_added.each do |adap|
+              if !adap.has_key?(:switchname) or !adap.has_key?(:name)
+                env[:ui].error "vagrant-networkadapter (add): invalid network adapters configuration: missing 'name' or 'swichname'."
+              else
+                switchname = adap[:switchname].encode("ISO-8859-1")
+                name = adap[:name].encode("ISO-8859-1")
+                env[:ui].info "vagrant-networkadapter (add): Creating network adapter '#{name}' attached to switch '#{switchname}''"
+    
+                new_networkadapter(env, switchname, name)
+              end
+            end
+          else
+            env[:ui].warn "vagrant-networkadapter (add): not enabled."
+          end
+
+          # Allow middleware chain to continue so VM is booted
+          @app.call(env)
+        end
+
+        private
+
+        def new_networkadapter(env, switchname, name)
+          driver = @machine.provider.driver
+          options = {
+            "VMID" => @machine.id,
+            "SwitchName" => switchname,
+            "Name" => name
+          }
+          s = File.join(File.dirname(__FILE__), 'scripts', 'add_vmnetworkadapter.ps1')
+          driver.execute(s, options)
+        end
+      end
+	  
+	  
+	  class NetworkAdapterChangeHyperV
         def initialize(app, env)
           @app = app
           @machine = env[:machine]
