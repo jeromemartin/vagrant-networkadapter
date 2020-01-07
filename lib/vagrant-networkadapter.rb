@@ -30,14 +30,9 @@ module Vagrant
 		hook.before(Action::NetworkAdapterAddHyperV, Action::NetworkAdapterRenameHyperV)
       end
 
-      action_hook(:networkadapter_change, :provisioner_run) do |hook|
+      action_hook(:networkadapter_change, :machine_action_provision) do |hook|
         require_relative 'vagrant-networkadapter/actions'
-        hook.after(:run_provisioner, Action::NetworkAdapterChangeHyperV)
-      end
-
-	  action_hook(:networkadapter_changelast, :machine_action_provision) do |hook|
-        require_relative 'vagrant-networkadapter/actions'
-        hook.after(VagrantPlugins::HyperV::Action::Configure, Action::NetworkAdapterChangeLastHyperV)
+        hook.after(:machine_action_provision, Action::NetworkAdapterChangeHyperV)
       end
     end
   end

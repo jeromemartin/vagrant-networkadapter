@@ -2,7 +2,7 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [string]$VmId,
+    [string] $VmId,
     [parameter (Mandatory=$true)]
     [string] $SwitchName,
     [parameter (Mandatory=$false)]
