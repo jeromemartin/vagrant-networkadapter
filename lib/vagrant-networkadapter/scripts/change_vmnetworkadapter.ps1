@@ -2,7 +2,7 @@
 
 param(
     [Parameter(Mandatory=$true)]
-    [string]$VmId,
+    [string] $VmId,
     [parameter (Mandatory=$true)]
     [string] $SwitchName,
     [parameter (Mandatory=$false)]
@@ -22,6 +22,6 @@ try {
     Connect-VMNetworkAdapter -VMNetworkAdapter $adap -SwitchName $SwitchName
 } catch {
     $ErrorMessage = $_.Exception.Message
-    Write-ErrorMessage "Failed to change network adapter for VM $VmId : $ErrorMessage"
+    Write-ErrorMessage "SwitchName : $SwitchName Name : $Name VM : $VM VmId : $VmId Failed to change network adapter for VM $VmId : $ErrorMessage"
     exit 1    
 }
